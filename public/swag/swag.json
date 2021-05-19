@@ -1,0 +1,210 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "Intelligent web assignment doc.",
+      "version": "1.0.0",
+      "title": "Intelligent web",
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "host": "1.14.194.153:3000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "img",
+        "description": "about img"
+      },
+      {
+        "name": "chat",
+        "description": "about chat"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/chat/{id}": {
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "img id"
+          }
+        ],
+        "get": {
+          "tags": [
+            "chat"
+          ],
+          "summary": "get history msg by img id",
+          "responses": {
+            "200": {
+              "description": "list of chat history"
+            }
+          }
+        }
+      },
+      "/img/add": {
+        "post": {
+          "tags": [
+            "img"
+          ],
+          "summary": "add img",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "img",
+              "schema": {
+                "$ref": "#/definitions/img"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "img, id, user"
+            }
+          }
+        }
+      },
+      "/img/all": {
+        "get": {
+          "tags": [
+            "img"
+          ],
+          "summary": "get all imgs",
+          "responses": {
+            "200": {
+              "description": "list of imgs"
+            }
+          }
+        }
+      },
+      "/img/p/{userId}": {
+        "get": {
+          "tags": [
+            "img"
+          ],
+          "summary": "get img by user id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "required": true,
+              "type": "string",
+              "description": "user id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "list of imgs"
+            }
+          }
+        }
+      },
+      "/img/id/{id}": {
+        "get": {
+          "tags": [
+            "img"
+          ],
+          "summary": "get img by img id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "img id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "img"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "img"
+          ],
+          "summary": "delete img by img id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "img id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "deleted img"
+            }
+          }
+        }
+      },
+      "/img/add/text": {
+        "post": {
+          "tags": [
+            "img"
+          ],
+          "summary": "add text in img",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "imgText",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/imgText"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "new img"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "img": {
+        "type": "object",
+        "properties": {
+          "img": {
+            "type": "string",
+            "description": "base64 img"
+          },
+          "user": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "img"
+        }
+      },
+      "imgText": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "imgText"
+        }
+      }
+    }
+  }

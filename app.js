@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var usersRouter = require('./routes/users');
+
+// const swaggerUi = require('swagger-ui-express');
+
 
 var app = express();
 
@@ -13,6 +16,15 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://1.14.194.153:888');
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE');
+  // res.header('Content-Type', 'application/json;charset=utf-8');
+  next();
+});
+
+app.use('/doc', express.static('./public/swag'));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

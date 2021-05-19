@@ -29,6 +29,15 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+const io = require('socket.io')(server, {
+// const io = require('socket.io')(http.createServer().listen(888), {
+  pingTimeout: 60000,
+  cors: true
+});
+
+var socket_module = require('../socket.io/socket-io');
+socket_module.init(io);
+
 /**
  * Normalize a port into a number, string, or false.
  */

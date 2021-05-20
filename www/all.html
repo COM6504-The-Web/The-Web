@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Online network system</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+
+          <a class="navbar-brand" href="index.html">home</a>
+          <a class="navbar-brand" href="upload.html">Image upload</a>
+          <a class="navbar-brand" href="all.html">Image all</a>
+          
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          登录
+          <form class="navbar-form navbar-right">
+
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+    <div id="box"></div>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Show all pictures</h1>
+        <p>Online network system</p>
+    
+    <div class="container">
+        
+      <!-- Example row of columns -->
+<div id="san" class="row">
+<!--this is a -->
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2021</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+     function parseDom(arg) {
+
+　　 var objE = document.createElement("div");
+
+　　 objE.innerHTML = arg;
+
+　　 return objE.childNodes;
+
+};
+window.onload = function(){
+        $.ajax
+    ({
+    	url: "http://1.14.194.153:3000/img/all",
+		dataType: "json",
+		type: "get",
+	    success:function(res){
+            console.log(res)
+            var lens = res.length;
+            for (i = 0; i < lens; i++){ 
+        
+            console.log(res[i].content)
+        
+            var imgbox = res[i].content;
+            var uname = res[i].user;
+            var idbox = res[i].id;
+            if(imgbox === ""){
+                continue
+            }
+            var text = '<div class="col-md-4"><div class="card"><img class="card-img-top" src="' + imgbox + '"><div class="card-body"><h4 class="card-title">' + '<a href="' + '/s.html' + '?user=' + uname + '"' + ">" + uname + '</a>' + '<a style="margin-left:45px;" class="btn btn-primary" href="job.html?id=' + idbox  + '"' +  'role="button">Chat discussion</a>' +  '</h4></div></div></div>';
+            $('#san').append(($(text)))
+             }
+
+		},
+	    error:function(){
+	    	alert('failed!');
+	    },
+    });
+}
+
+    </script>
+    
+  </body>
+</html>

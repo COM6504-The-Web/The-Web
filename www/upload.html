@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Online network system</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">home</a>
+          <a class="navbar-brand" href="upload.html">Image upload</a>
+          <a class="navbar-brand" href="all.html">Image all</a>
+          
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+    <div id="box"></div>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Click to upload the image file</h1>
+        <p>Online network system</p>
+
+		<label for="name">image name</label>
+		<input type="text" class="form-control" id="name" 
+			   placeholder="your name">
+	</div>
+        <a style="margin-left:100px;" onclick="put()" class="btn btn-primary btn-lg" href="#" role="button">upload file &raquo;</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+          
+        <input class="file" value="upload file" type="file" id="img_upload"/>
+        <textarea id="base64_code" rows="30" cols="250"></textarea>
+        <p id="img_area"></p>
+
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2021</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+                window.onload = function(){
+            var img_upload=document.getElementById("img_upload");
+            var base64_code=document.getElementById("base64_code");
+            var img_area=document.getElementById("img_area");
+            img_upload.addEventListener('change',readFile,false);}
+        function readFile(){
+            var file=this.files[0];
+            if(!/image\/\w+/.test(file.type)){
+                alert("Please check the picture type");
+                return false;
+            }
+            var reader=new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(){
+                $('#box').text = this.result;
+            base64_code.innerHTML = this.result;
+    img_area.innerHTML = '<div>img output：</div><img src="'+this.result+'" alt=""/>';
+}
+}
+function put(){
+    var uname = document.getElementById("name").value;
+    if(uname == ""){
+        alert('User name not filled in!');
+        return false;
+    }
+    
+    $.ajax
+    ({
+    	url: "http://1.14.194.153:3000/img/add",
+		dataType: "json",
+		type: "post",
+		data: { 
+			    img: base64_code.innerHTML,  
+			    user:uname
+			  },
+	    success:function(res){
+	        var base64_code=document.getElementById("base64_code");
+	        if(base64_code.innerHTML === ""){
+	            alert('The picture is not selected');
+	        }else{
+	          alert('The upload was successful!');  
+	        }
+            
+		},
+	    error:function(){
+	    	alert('failed!');
+	    },
+    });
+}
+    </script>
+    
+  </body>
+</html>

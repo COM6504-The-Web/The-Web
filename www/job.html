@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Online network system</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+        <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+        #names { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #names:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+#messages{
+    float: right;
+    border:2px solid #111;
+    width: 800px;
+    height: 500px;
+}
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+  </head>
+
+  <body>
+<script src="http://1.14.194.153:3000/socket.io/socket.io.js"></script>
+
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+
+          <a class="navbar-brand" href="index.html">home</a>
+          <a class="navbar-brand" href="upload.html">Image upload</a>
+          <a class="navbar-brand" href="all.html">Image all</a>
+          
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+    <div id="box"></div>
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Discuss the pictures</h1>
+        <p>Online network system</p>
+    
+    <div class="container">
+        <div class="card" style="width: 18rem;">
+  <img id="boxbox" class="card-img-top" src="" alt="Card image cap">
+  <div class="card-body">
+    <h5 id="u" class="card-title">xxx</h5>
+  </div>
+</div>
+<div class="row">
+   <a id="link" style="margin:20px 5px" class="btn btn-primary" href="edit.html" role="button">Edit the watermark</a> 
+</div>
+<div id="san" class="row">
+      <div id="manman">
+         <ul id="messages"></ul>
+
+             <span>name</span> <input id="names" autocomplete="off" />
+             <br>
+         
+            
+               <span>text</span> <input id="input" autocomplete="off" /><button onclick="one()">Send</button>
+            
+        </div>
+      </div>
+
+      <hr>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+function getUrlParams(name) { 
+    var url = window.location.search;
+    if (url.indexOf('?') == 1) { return false; }
+    url = url.substr(1);
+    url = url.split('&');
+    var name = name || '';
+    var nameres;
+    for(var i=0;i<url.length;i++) {
+        var info = url[i].split('=');
+        var obj = {};
+        obj[info[0]] = decodeURI(info[1]);
+        url[i] = obj;
+    }
+    if (name) {
+        for(var i=0;i<url.length;i++) {
+            for (const key in url[i]) {
+                if (key == name) {
+                    nameres = url[i][key];
+                }
+            }
+        }
+    } else {
+        nameres = url;
+    }
+    return nameres;
+}
+     function parseDom(arg) {
+
+　　 var objE = document.createElement("div");
+
+　　 objE.innerHTML = arg;
+
+　　 return objE.childNodes;
+
+};
+window.onload = function(){
+    var userbox = (getUrlParams('id'));
+     var uid = (getUrlParams('id'));
+     var link = document.getElementById('link');
+     link.href = 'edit.html?id=' + uid;
+         $.ajax
+    ({
+    	url: "http://1.14.194.153:3000/chat/" + uid,
+		dataType: "json",
+		type: "get",
+	    success:function(res){
+            if(res){
+                for (i = 0; i < res.length; i++) { 
+                    console.log(res[i])
+                    var t = '[' + res[i].text +  ']' + '  ' + res[i].user + '  ' + res[i]. time;
+                    var item = document.createElement('li');
+                    item.textContent = t;
+                    messages.appendChild(item);
+                 }
+            }
+		},
+	    error:function(){
+	    	alert('failed!');
+	    },
+    });
+
+        $.ajax
+    ({
+    	url: "http://1.14.194.153:3000/img/id/" + userbox,
+		dataType: "json",
+		type: "get",
+	    success:function(res){
+            console.log(res.content)
+            var imgbox = res.content;
+            var uname = res.user;
+            var box = document.getElementById("boxbox");
+            var u =  document.getElementById("u");
+            box.src = imgbox;
+            u.innerHTML = uname;
+
+		},
+	    error:function(){
+	    	alert('failed!');
+	    },
+    });
+}
+
+    </script>
+    <!--chat-->
+        <script>
+var socket=io.connect('1.14.194.153:3000');
+        socket.connect()
+function one(){
+    
+      var messages = document.getElementById('messages');
+  var form = document.getElementById('form');
+  var input = document.getElementById('input');
+var uid = (getUrlParams('id'));
+var u =  document.getElementById("names");
+     if (input.value) {
+      socket.emit('chat', uid, u.value, input.value);//room, userId, chatText
+      input.value = '';
+    }
+};
+
+
+
+  socket.on('chatback', function(room, userId, chatText) {
+    console.log(room, userId, chatText);
+    var item = document.createElement('li');
+    item.textContent = '[' +  chatText + ']' + '  ' +  userId + '   ';
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+    </script>
+    
+    <!--chat end-->
+  </body>
+</html>
